@@ -6,6 +6,7 @@ import (
 	"planetor-reborn/data"
 	"strconv"
 
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -68,6 +69,7 @@ func updateCelestialBody(c *gin.Context) {
 }
 
 func main() {
+	
 	data.ConnectDatabase()
 
 	router := gin.Default()
@@ -77,6 +79,8 @@ func main() {
 	router.GET("/api/celestialbody/:id", getCelestialBodyById)
 	router.PUT("/api/celestialbody/:id", updateCelestialBody)
 	router.POST("/api/celestialbody", addCelestialBody)
+	router.GET("/api/getpeopleinspace", GetPeopleInSpace)
 
 	router.Run(":8080")
+	
 }
