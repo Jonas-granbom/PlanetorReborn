@@ -5,6 +5,6 @@ phases:
   build:
     commands:
       - go test
-      - docker build -t git.systementor.se/jonas.granbom/planetor-reborn .
+      - docker build -t git.systementor.se/jonas.granbom/planetor-reborn1 .
       - docker login -u jonas.granbom -p yacloud1 https://git.systementor.se
-      - docker push git.systementor.se/jonas.granbom/planetor-reborn
+      - docker push git.systementor.se/jonas.granbom/planetor-reborn1
