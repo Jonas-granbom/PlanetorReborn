@@ -6,7 +6,6 @@ import (
 	"planetor-reborn/data"
 	"strconv"
 
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -45,7 +44,7 @@ func getCelestialBodyById(c *gin.Context) {
 	var celestialBody data.CelestialBody
 	err := data.Db.First(&celestialBody, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id not found in database"})
 	} else {
 		c.IndentedJSON(http.StatusOK, celestialBody)
 	}
@@ -56,7 +55,7 @@ func updateCelestialBody(c *gin.Context) {
 	var celestialBody data.CelestialBody
 	err := data.Db.First(&celestialBody, id).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id not found in database"})
 	} else {
 		if err := c.BindJSON(&celestialBody); err != nil {
 			return
@@ -67,20 +66,35 @@ func updateCelestialBody(c *gin.Context) {
 	}
 
 }
+func deleteCelestialBody(c *gin.Context) {
+	id := c.Param("id")
+	var celestialBody data.CelestialBody
+	err := data.Db.First(&celestialBody, id).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id not found in database"})
+	}
+	celestialBody.Id, _ = strconv.Atoi(id)
+	data.Db.Delete(&celestialBody)
+	c.IndentedJSON(http.StatusOK, celestialBody)
+
+}
 
 func main() {
-	
+
 	data.ConnectDatabase()
 
 	router := gin.Default()
 	router.GET("/api/test", test)
 	router.GET("/api/seed", seed)
+
 	router.GET("/api/celestialbodies", getCelestialBodies)
 	router.GET("/api/celestialbody/:id", getCelestialBodyById)
 	router.PUT("/api/celestialbody/:id", updateCelestialBody)
 	router.POST("/api/celestialbody", addCelestialBody)
+	router.DELETE("/api/celestialbody/:id", deleteCelestialBody)
+
 	router.GET("/api/getpeopleinspace", GetPeopleInSpace)
 
 	router.Run(":8080")
-	
+
 }
