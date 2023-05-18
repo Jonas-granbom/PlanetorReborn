@@ -8,3 +8,6 @@ phases:
       - docker build -t git.systementor.se/jonas.granbom/planetor-reborn .
       - docker login -u jonas.granbom -p yacloud1 https://git.systementor.se
       - docker push git.systementor.se/jonas.granbom/planetor-reborn
+artifacts:
+  files:
+    - '**/*'      
