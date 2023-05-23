@@ -9,6 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
+func enableCors(c *gin.Context) {
+	(*c).Header("Access-Control-Allow-Origin", "*")
+}
+
 
 func test(c *gin.Context) {
 	c.JSON(http.StatusOK, "hej")
@@ -19,6 +23,7 @@ func seed(c *gin.Context) {
 	c.JSON(http.StatusOK, "db filled with random data")
 }
 func getCelestialBodies(c *gin.Context) {
+	enableCors(c)
 	var celestialBodies []data.CelestialBody
 	data.Db.Find(&celestialBodies)
 
@@ -81,6 +86,7 @@ func deleteCelestialBody(c *gin.Context) {
 
 func main() {
 
+	
 	data.ConnectDatabase()
 
 	router := gin.Default()
