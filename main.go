@@ -23,9 +23,9 @@ func seed(c *gin.Context) {
 	c.JSON(http.StatusOK, "db filled with random data")
 }
 func getCelestialBodies(c *gin.Context) {
-
+	enableCors(c)
 	var celestialBodies []data.CelestialBody
-	data.Db.Find(&celestialBodies)
+	data.Db.Find(&celestialBodies)	
 
 	c.IndentedJSON(http.StatusOK, celestialBodies)
 }
@@ -83,6 +83,10 @@ func deleteCelestialBody(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, celestialBody)
 
 }
+func enableCors(c *gin.Context) {
+    (*c).Header("Access-Control-Allow-Origin", "*")
+}
+ 
 
 func main() {
 
