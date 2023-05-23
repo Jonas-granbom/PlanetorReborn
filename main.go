@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	cors "github.com/rs/cors/wrapper/gin"
 
 	"gorm.io/gorm"
 )
@@ -17,7 +16,8 @@ func seed(c *gin.Context) {
 	data.FillDB()
 	c.JSON(http.StatusOK, "db filled with random data")
 }
-func getCelestialBodies(c *gin.Context) {
+func getCelestialBodies(c *gin.Context) {	
+	enableCors(c)
 
 	var celestialBodies []data.CelestialBody
 	data.Db.Find(&celestialBodies)	
@@ -78,7 +78,9 @@ func deleteCelestialBody(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, celestialBody)
 
 }
-
+func enableCors(c *gin.Context) {
+	(*c).Header("Access-Control-Allow-Origin", "*")
+}
 
 
 func main() {
@@ -86,7 +88,7 @@ func main() {
 	data.ConnectDatabase()
 
 	router := gin.Default()
-	router.Use(cors.Default())
+	
 
 	router.GET("/api/seed", seed)
 	
