@@ -17,7 +17,7 @@ func seed(c *gin.Context) {
 	c.JSON(http.StatusOK, "db filled with random data")
 }
 func getCelestialBodies(c *gin.Context) {	
-	enableCors(c)
+	
 
 	var celestialBodies []data.CelestialBody
 	data.Db.Find(&celestialBodies)	
@@ -78,9 +78,7 @@ func deleteCelestialBody(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, celestialBody)
 
 }
-func enableCors(c *gin.Context) {
-	(*c).Header("Access-Control-Allow-Origin", "*")
-}
+
 func CORS(c *gin.Context) {
 
 	// First, we add the headers with need to enable CORS
@@ -114,7 +112,7 @@ func main() {
 
 	router.GET("/api/seed", seed)
 	
-	router.GET("/api/celestialbodies", getCelestialBodies)
+	router.GET("/api/celestialbody", getCelestialBodies)
 	router.GET("/api/celestialbody/:id", getCelestialBodyById)
 	router.PUT("/api/celestialbody/:id", updateCelestialBody)
 	router.POST("/api/celestialbody", addCelestialBody)
