@@ -6,12 +6,11 @@ import (
 	"planetor-reborn/data"
 	"strconv"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	"gorm.io/gorm"
 )
-func enableCors(c *gin.Context) {
-	(*c).Header("Access-Control-Allow-Origin", "*")
-}
 
 
 func test(c *gin.Context) {
@@ -19,11 +18,12 @@ func test(c *gin.Context) {
 
 }
 func seed(c *gin.Context) {
+	
 	data.FillDB()
 	c.JSON(http.StatusOK, "db filled with random data")
 }
 func getCelestialBodies(c *gin.Context) {
-	enableCors(c)
+
 	var celestialBodies []data.CelestialBody
 	data.Db.Find(&celestialBodies)
 
@@ -87,12 +87,14 @@ func deleteCelestialBody(c *gin.Context) {
 func main() {
 
 	
+  	
 	data.ConnectDatabase()
 
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.GET("/api/test", test)
 	router.GET("/api/seed", seed)
-
+	
 	router.GET("/api/celestialbodies", getCelestialBodies)
 	router.GET("/api/celestialbody/:id", getCelestialBodyById)
 	router.PUT("/api/celestialbody/:id", updateCelestialBody)
