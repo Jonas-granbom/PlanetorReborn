@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"planetor-reborn/data"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/itsjamie/gin-cors"
 
 	"gorm.io/gorm"
 )
@@ -87,8 +89,16 @@ func main() {
   	
 	data.ConnectDatabase()
 
-	router := gin.Default()
-	
+	router := gin.New()
+	router.Use(cors.Middleware(cors.Config{
+		Origins:        "*",
+		Methods:        "GET, PUT, POST, DELETE",
+		RequestHeaders: "Origin, Authorization, Content-Type",
+		ExposedHeaders: "",
+		MaxAge: 50 * time.Second,
+		Credentials: false,
+		ValidateHeaders: false,
+	}))
 
 	router.GET("/api/seed", seed)
 	
