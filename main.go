@@ -104,7 +104,7 @@ func main() {
 
 	router.GET("/api/seed", seed)
 	
-	router.GET("/api/celestialbody", getCelestialBodies)
+	router.GET("api/celestialbody", getCelestialBodies)
 	router.GET("/api/celestialbody/:id", getCelestialBodyById)
 	router.PUT("/api/celestialbody/:id", updateCelestialBody)
 	router.POST("/api/celestialbody", addCelestialBody)
