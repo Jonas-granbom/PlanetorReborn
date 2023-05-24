@@ -5,20 +5,17 @@ import (
 	"net/http"
 	"planetor-reborn/data"
 	"strconv"
-	
-	"github.com/gin-gonic/gin"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func seed(c *gin.Context) {
-	
 	data.FillDB()
 	c.JSON(http.StatusOK, "db filled with random data")
 }
 func getCelestialBodies(c *gin.Context) {	
 	
-
 	var celestialBodies []data.CelestialBody
 	data.Db.Find(&celestialBodies)	
 
@@ -90,7 +87,6 @@ func CORS() gin.HandlerFunc {
 			c.AbortWithStatus(204)
 			return
 		}
-
 		c.Next()
 	}
 }
@@ -104,7 +100,7 @@ func main() {
 
 	router.GET("/api/seed", seed)
 	
-	router.GET("api/celestialbody", getCelestialBodies)
+	router.GET("/api/celestialbody", getCelestialBodies)
 	router.GET("/api/celestialbody/:id", getCelestialBodyById)
 	router.PUT("/api/celestialbody/:id", updateCelestialBody)
 	router.POST("/api/celestialbody", addCelestialBody)
