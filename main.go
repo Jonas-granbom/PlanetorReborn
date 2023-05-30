@@ -11,15 +11,15 @@ import (
 )
 
 func seed(c *gin.Context) {
-	data.FillDB()
-	c.JSON(http.StatusOK, "db filled with random data")
+	//data.FillDB()
+	c.JSON(http.StatusOK, gin.H{"message":"DB filled with dummydata"})
 }
-func getCelestialBodies(c *gin.Context) {	
+func GetCelestialBodies(c *gin.Context) {	
 	
 	var celestialBodies []data.CelestialBody
 	data.Db.Find(&celestialBodies)	
 
-	c.IndentedJSON(http.StatusOK, celestialBodies)
+	c.JSON(http.StatusOK, celestialBodies)
 }
 func addCelestialBody(c *gin.Context) {
 	var celestialBody data.CelestialBody
@@ -90,23 +90,28 @@ func CORS() gin.HandlerFunc {
 		c.Next()
 	}
 }
+func SetupRouter() *gin.Engine{
+	router := gin.Default()
+	router.Use(CORS())
+
+	router.GET("/seed", seed)
+	
+	router.GET("/celestialbody", GetCelestialBodies)
+	router.GET("/celestialbody/:id", getCelestialBodyById)
+	router.PUT("/celestialbody/:id", updateCelestialBody)
+	router.POST("/celestialbody", addCelestialBody)
+	router.DELETE("/celestialbody/:id", deleteCelestialBody)
+
+	router.GET("/getpeopleinspace", GetPeopleInSpace)
+	return router
+}
 
 func main() {
   	
 	data.ConnectDatabase()
 
-	router := gin.Default()
-	router.Use(CORS())
+	router := SetupRouter()
 
-	router.GET("/api/seed", seed)
-	
-	router.GET("/api/celestialbody", getCelestialBodies)
-	router.GET("/api/celestialbody/:id", getCelestialBodyById)
-	router.PUT("/api/celestialbody/:id", updateCelestialBody)
-	router.POST("/api/celestialbody", addCelestialBody)
-	router.DELETE("/api/celestialbody/:id", deleteCelestialBody)
-
-	router.GET("/api/getpeopleinspace", GetPeopleInSpace)
 
 	router.Run(":8080")
 
